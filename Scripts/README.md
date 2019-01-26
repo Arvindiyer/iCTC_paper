@@ -2,11 +2,14 @@
 
 ### In-Silico Label Free Identification Of Circulating Tumor Cells Using sc-RNA seq dataset
 
-# Quick Start
+# Description
 
-This repository contains various scripts written in R and python organised into multiple folders. Each folder contains a readme file with their detailed description.
+Scripts folder is organized into multiple folder each folder containg scripts performing task as described in the below table. 
 
-Data used in this repository is provide at [link!](http://senguptalab.iiitd.edu.in:1106/iCTC/) as .rds files. Download them and put them in ```Data```  folder.
+Folder Name | Description
+------------ | -------------
+Data Preprocessing | This folder contains the scripts used to generate ctc+blood and only dataset.
+
 
 # Cite Us
 If you end up using this code or the data, please cite the following paper - 
