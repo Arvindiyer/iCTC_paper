@@ -1,19 +1,15 @@
 # ---
 # Title: iCTC Project
-# Description: Supplementary Figure-6
+# Description: Main Figure-2
 # Authors: Arvind Iyer <arvind16122@iiitd.ac.in>, Krishan Gupta <krishang@iitd.ac.in>, Shreya Sharma <shreya15096@iiitd.ac.in> 
 # Corresponding Author: <Debarka Sengputa<debarka@iiitd.ac.in>
 # Feel free to get in touch with us as we would love to talk and discuss science :):)
 # ---
 
 # Set working Directory and a seed
-setwd('~/iCTC/reboot/paper_work/Data/')
+setwd('~/iCTC/Data/')
 #setwd('~/Data/')
 set.seed(10)
-
-library(ggpubr)
-library(ggplot2)
-library(RColorBrewer)
 
 # ---
 # Utility Functions
@@ -154,6 +150,16 @@ movingAverageByCol <- function(x,width=5,full.length=TRUE)
 # ---
 # Utility Functions End
 # ---
+library(readr)
+library(ggpubr)
+library(viridis)
+library(superheat)
+library(RColorBrewer)
+library(pheatmap)
+
+#---
+# Figure-A,B E:M Plots
+#---
 
 # Loading Genes
 filter_epi_genes <- readRDS('final_filter_epitheilal_genes.rds')
@@ -220,20 +226,138 @@ dim(matrix_data)
 order_matrix_data <- matrix_data[order(matrix_data$E_M),]
 dim(order_matrix_data)
 head(order_matrix_data)
+cor(matrix_data$Epitheial,matrix_data$Mesenchymal)
 # Scatter Plot
-ggplot(round_df(order_matrix_data,2), aes(x=Epitheial, y=Mesenchymal,color=Study)) +
-  facet_wrap(. ~ Study) +
-  scale_color_brewer(palette="Set1")+
-  geom_point() +
-  theme_bw()+
+ggscatter(round_df(matrix_data,2),
+          "Epitheial",
+          "Mesenchymal",
+          color = "Study",
+          palette = "Set1")+
   theme(axis.text = element_text(family = "Helvitca",size = 10),
         legend.position = "right",
         legend.title = element_blank(),
-        strip.text = element_text(family = "Helvitca",size = 5),
         legend.text = element_text(family = "Helvitca",size = 8))+
   guides(color = guide_legend(override.aes = list(size = 2)))+
+  annotate("text", x = 3, y = 1.5, label = "bold(italic(r)) == -0.87",parse = TRUE)+
   xlab('Epithelial Singature')+
   ylab('Mesenchymal Singature')
 
+EM_order_data <- new_mat_to_plot_gene[1:36,order(matrix_data$E_M)]
+dim(EM_order_data)
+data <- EM_order_data
+for (i in c(1:5))
+{
+  data <- movingAverageByCol(t(EM_order_data),10)
+}
+dim(data)
+#dim(smooth_data)
+annotation_col <- data.frame(Study = factor(order_matrix_data$Study))
+rownames(annotation_col) <- colnames(EM_order_data)
+pheatmap(log(t(data)+1),
+         show_rownames = TRUE,
+         show_colnames = FALSE,
+         cluster_cols = F,
+         fontsize = 8,
+         fontsize_col = 7,
+         annotation_col = annotation_col,
+         annotation_colors = ann_colors,
+         annotation_row = annotation_rows,
+         cluster_rows = F,
+         cutree_rows = F,
+         scale = "none", 
+         treeheight_row = 0,
+         color = colorRampPalette(rev(brewer.pal(n = 9, name ="RdBu")))(100))
 
-#write.csv(order_matrix_data,file="E_M_order_data.csv")
+#---
+# Figure-C Surface Marker Fold Change Data plotted using google sheet
+#---
+
+#---
+# Figure-D Survivla Plots
+#---
+# GBM Box Plot
+load('updated_gbm_c_index_data_mnn.Rdata')
+ggboxplot(gbm_c_index_data,
+          x = "methods",
+          y = "c.index.values",
+          fill = "methods",
+          bxp.errorbar = TRUE,
+          notch = FALSE,
+          palette = "Set2",
+          order = c("Clinical","mRNA","Stouffer","Clinical+","mRNA+","All"))+
+  guides(size = FALSE)+
+  theme(axis.text.y = element_text(family = "Helvitca",colour = "black",size = 12),
+        axis.text.x = element_text(family = "Helvitca",colour = "black",size = 12,angle = 0, hjust = 0.5),
+        legend.position = "None",
+        legend.text = element_text(family = "Helvitca",color = "black",size = 10),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(size = 0.5, linetype = "solid",colour = "black"))+
+  xlab('')+
+  ylab('C-Index Values')
+
+
+# OV Box Plot
+load('updated_ov_c_index_data_mnn.Rdata')
+ggboxplot(ov_c_index_data,
+          x = "methods",
+          y = "c.index.values",
+          fill = "methods",
+          bxp.errorbar = TRUE,
+          notch = FALSE,
+          palette = "Set2",
+          order = c("Clinical","mRNA","Stouffer","Clinical+","mRNA+","All"))+
+  guides(size = FALSE)+
+  theme(axis.text.y = element_text(family = "Helvitca",colour = "black",size = 12),
+        axis.text.x = element_text(family = "Helvitca",colour = "black",size = 12,angle = 0, hjust = 0.5),
+        legend.position = "None",
+        legend.text = element_text(family = "Helvitca",color = "black",size = 10),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(size = 0.5, linetype = "solid",colour = "black"))+
+  xlab('')+
+  ylab('C-Index Values')
+
+
+# KIRC Box Plot
+load('updated_kidney_c_index_data_mnn.Rdata')
+ggboxplot(kidney_c_index_data,
+          x = "methods",
+          y = "c.index.values",
+          fill = "methods",
+          bxp.errorbar = TRUE,
+          notch = FALSE,
+          palette = "Set2",
+          order = c("Clinical","mRNA","Stouffer","Clinical+","mRNA+","All"))+
+  guides(size = FALSE)+
+  theme(axis.text.y = element_text(family = "Helvitca",colour = "black",size = 12),
+        axis.text.x = element_text(family = "Helvitca",colour = "black",size = 12,angle = 0, hjust = 0.5),
+        legend.position = "None",
+        legend.text = element_text(family = "Helvitca",color = "black",size = 10),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(size = 0.5, linetype = "solid",colour = "black"))+
+  xlab('')+
+  ylab('C-Index Values')
+
+
+# LUSC Box Plot
+load('updated_lung_c_index_data_mnn.Rdata')
+ggboxplot(lung_c_index_data,
+          x = "methods",
+          y = "c.index.values",
+          fill = "methods",
+          bxp.errorbar = TRUE,
+          notch = FALSE,
+          palette = "Set2",
+          order = c("Clinical","mRNA","Stouffer","Clinical+","mRNA+","All"))+
+  guides(size = FALSE)+
+  theme(axis.text.y = element_text(family = "Helvitca",colour = "black",size = 12),
+        axis.text.x = element_text(family = "Helvitca",colour = "black",size = 12,angle = 0, hjust = 0.5),
+        legend.position = "None",
+        legend.text = element_text(family = "Helvitca",color = "black",size = 10),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(size = 0.5, linetype = "solid",colour = "black"))+
+  xlab('')+
+  ylab('C-Index Values')
