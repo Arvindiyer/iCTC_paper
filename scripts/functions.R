@@ -159,7 +159,10 @@ movingAverageByCol <- function(x,width=5,full.length=TRUE)
   }
   x/w
 }
-
+# Median for box plot
+fun_mean <- function(x){
+  return(data.frame(y=median(x),label=median(x,na.rm=T)))
+  }
 # ---
 # Utility Functions End
 # ---

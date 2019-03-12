@@ -1,12 +1,10 @@
 # iCTC Project
 
-### In-Silico Label Free Identification Of Circulating Tumor Cells Using sc-RNA seq dataset
+### Label free enrichment and characterisation of single circulating tumor cells
 
 # Quick Start
 
-This repository contains various scripts written in R and python organised into multiple folders. Each folder contains a readme file with their detailed description.
-
-Data used in this repository is provide at [link!](http://senguptalab.iiitd.edu.in:1106/iCTC/) as .rds files. Download them and put them in ```Data```  folder.
+This repository contains dataset and scripts used for the paper.
 
 # Cite Us
 If you end up using this code or the data, please cite the following paper - 

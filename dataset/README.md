@@ -1,15 +1,10 @@
 # iCTC Project
 
-### In-Silico Label Free Identification Of Circulating Tumor Cells Using sc-RNA seq dataset
+### Label free enrichment and characterisation of single circulating tumor cells
 
 # Description
 
-Data used in this repository is provide at [link!](http://senguptalab.iiitd.edu.in:1106/iCTC/) as .rds files. Download them in this folder. Below Table gives description of the dataset.
-
-Folder Name | Description
------------- | -------------
-GSE51827_CTC.rds | Circulating Tumor Cell Clusters are Oligoclonal Precursors of Breast Cancer Metastasis
-
+This repository contains dataset and scripts used for the paper. Data used in this repository is provide at [link!](https://drive.google.com/drive/folders/1cjaZASvCA9cGcA73EvziyzGTERgC_GmS?usp=sharing) 
 
 
 # Cite Us
