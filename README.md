@@ -14,9 +14,13 @@ Coming Soon
 
 # License 
 
-Copyright (c) 2019 Arvind Iyer, Krishan Gupta, Shreya Sharma, Debarka Sengupta
+Copyright (c) 2019 Arvind Iyer, Krishan Gupta, Shreya Sharma, Kishore Hari, Mohit Kumar Jolly, Debarka Sengupta
 
 For license information, see [LICENSE](LICENSE) or http://mit-license.org
 
+Feel free to open an issuse in [Issuses](https://github.com/Arvindiyer/iCTC_paper/issues) section. 
+
 # Contact
-[@Arvindiyer](https://www.arvindkiyer.com/) - feel free to contact me for any technical issues!
+[@Arvindiyer](https://www.arvindkiyer.com/) - Contact for any technical issues!
+
+[@Debarka](https://www.debarka.com/) - Contact for any correspondance!
