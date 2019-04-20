@@ -21,6 +21,6 @@ For license information, see [LICENSE](LICENSE) or http://mit-license.org
 Feel free to open an issuse in [Issuses](https://github.com/Arvindiyer/iCTC_paper/issues) section. 
 
 # Contact
-[@Arvindiyer](https://www.arvindkiyer.com/) - Contact for any technical issues!
+[@Arvindiyer](http://arvindkiyer.com/) - Contact for any technical issues!
 
 [@Debarka](https://www.debarka.com/) - Contact for any correspondance!
