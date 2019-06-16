@@ -1,6 +1,6 @@
 # iCTC Project
 
-### Label free enrichment and characterisation of single circulating tumor cells
+### Machine learning based identification andcharacterization of circulating tumor cells
 
 # Quick Start
 
