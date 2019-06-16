@@ -1,8 +1,6 @@
 # iCTC Project
 
-### Label free enrichment and characterisation of single circulating tumor cells
-
-# Description
+### Machine learning based identification andcharacterization of circulating tumor cells
 
 This repository contains dataset and scripts used for the paper. Data used in this repository is provide at [link!](https://drive.google.com/drive/folders/1cjaZASvCA9cGcA73EvziyzGTERgC_GmS?usp=sharing) 
 
