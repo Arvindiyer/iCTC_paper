@@ -1,6 +1,6 @@
 # iCTC Project
 
-### Machine learning based identification andcharacterization of circulating tumor cells
+### Integrative analysis and machine learning based characterization of single circulating tumor cells
 
 # Quick Start
 
