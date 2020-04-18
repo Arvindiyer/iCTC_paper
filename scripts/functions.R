@@ -4,6 +4,10 @@
 # Authors: Arvind Iyer <arvind16122@iiitd.ac.in>, Krishan Gupta <krishang@iitd.ac.in>, Shreya Sharma <shreya15096@iiitd.ac.in> 
 # Corresponding Author: <Debarka Sengputa<debarka@iiitd.ac.in>
 # Feel free to get in touch with us as we would love to talk and discuss science :):)
+# version: 0.2
+# Updates:
+# 1] Added hyrdo-seq data
+# 2] Solved few bugs and refactor the code
 # ---
 
 # ---
@@ -39,7 +43,7 @@ gene_filter <- function(data,min.count=2,min.cell=3){
 normalization <- function(data,method="log"){
   if (method == "log")
   {
-    log_counts <- log(data + 1) / log(2)
+    log_counts <- log2(data + 1)
     print(paste('Normalized Data:',dim(log_counts),sep = " "))
     return(log_counts)
   }
@@ -162,7 +166,12 @@ movingAverageByCol <- function(x,width=5,full.length=TRUE)
 # Median for box plot
 fun_mean <- function(x){
   return(data.frame(y=median(x),label=median(x,na.rm=T)))
-  }
+}
+# Function to conver the count data to tpm
+tpm <- function(counts, lengths) {
+  rate <- counts / lengths
+  rate / sum(rate) * 1e6
+}
 # ---
 # Utility Functions End
 # ---

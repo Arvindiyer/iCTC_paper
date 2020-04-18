@@ -4,6 +4,11 @@
 # Authors: Arvind Iyer <arvind16122@iiitd.ac.in>, Krishan Gupta <krishang@iitd.ac.in>, Shreya Sharma <shreya15096@iiitd.ac.in> 
 # Corresponding Author: <Debarka Sengputa<debarka@iiitd.ac.in>
 # Feel free to get in touch with us as we would love to talk and discuss science :):)
+# version: 0.2
+# Updates:
+# 1] Removed overlapping study data
+# 2] Chnaged the cutoff and no-need to resample the blood data
+# 3] Solved few bugs and refactor the code
 # ---
 
 # Set working Directory and a seed
@@ -25,8 +30,34 @@ data <- readRDS('dataset/ctc_raw_count_data.rds')
 dim(data)
 raw.counts<-apply(data,2,function(x) {storage.mode(x) <- 'integer'; x})
 dim(raw.counts)
+# Grep the total CTC and removed overlapping study data
+length(grep("CTC_", colnames(raw.counts)))
+CTC_GSE51827_sample=grep("CTC_GSE51827", colnames(data))
+CTC_GSE55807_sample=grep("CTC_GSE55807", colnames(data))
+CTC_GSE60407_sample=grep("CTC_GSE60407", colnames(data))
+CTC_GSE67939_sample=grep("CTC_GSE67939", colnames(data))
+CTC_GSE67980_sample=grep("CTC_GSE67980", colnames(data))
+CTC_GSE74639_sample=grep("CTC_GSE74639", colnames(data))
+CTC_GSE75367_sample=grep("CTC_GSE75367", colnames(data))
+CTC_GSE109761_sample = grep("CTC_GSE109761",colnames(data))
+CTC_GSE86978_sample = grep("CTC_GSE86978",colnames(data))
+CTC_GSE38495_sample = grep("CTC_GSE38495",colnames(data))
+index <- index <- c(CTC_GSE51827_sample,
+                    CTC_GSE55807_sample,
+                    CTC_GSE60407_sample,
+                    CTC_GSE67939_sample,
+                    CTC_GSE67980_sample,
+                    CTC_GSE74639_sample,
+                    CTC_GSE75367_sample,
+                    CTC_GSE109761_sample,
+                    CTC_GSE86978_sample,
+                    CTC_GSE38495_sample)
+
+reduced_data <- raw.counts[,index]
+dim(reduced_data)
+rm(data)
 # Apply cell filtering to the dataset
-cell_filter_data <- cell_filter(raw.counts,5)
+cell_filter_data <- cell_filter(reduced_data,5)
 dim(cell_filter_data)
 # Apply gene filtering to the dataset
 gene_filter_data <- gene_filter(cell_filter_data,5,10)
@@ -69,12 +100,12 @@ gene_filter_data_reduced <- gene_filter_data[unique(total),]
 dim(gene_filter_data_reduced)
 cell_filter_data <- cell_filter(gene_filter_data_reduced,percentage = 10)
 dim(cell_filter_data)
-# Apply gene filtering to the dataset (30% of 718)
-gene_filter_data <- gene_filter(cell_filter_data,5,215)
+# Apply gene filtering to the dataset (30% of 550)
+gene_filter_data <- gene_filter(cell_filter_data,5,165)
 dim(gene_filter_data)
 normalized_data <- normalization(gene_filter_data,method = "median")
 new_mat_to_plot_gene<-unique(normalized_data)
-saveRDS(normalized_data,file = "dataset/final_marker_normalized_matrix.rds")
+saveRDS(normalized_data,file = "dataset/final_marker_normalized_matrix_v2.rds")
 
 length(na.omit(match(unique(epi_genes),rownames(new_mat_to_plot_gene))))
 length(na.omit(match(unique(mesn_genes),rownames(new_mat_to_plot_gene))))
@@ -89,7 +120,6 @@ CTC_GSE67980_sample= length(grep("CTC_GSE67980", colnames(normalized_matrix_filt
 CTC_GSE74639_sample= length(grep("CTC_GSE74639", colnames(normalized_matrix_filter)))
 CTC_GSE75367_sample= length(grep("CTC_GSE75367", colnames(normalized_matrix_filter)))
 CTC_GSE109761_sample= length(grep("CTC_GSE109761",colnames(normalized_matrix_filter)))
-CTC_GSE111065_sample= length(grep("CTC_GSE111065",colnames(normalized_matrix_filter)))
 CTC_GSE86978_sample = length(grep("CTC_GSE86978",colnames(normalized_matrix_filter)))
 CTC_GSE38495_sample = length(grep("CTC_GSE38495",colnames(normalized_matrix_filter)))
 
@@ -101,23 +131,22 @@ col_label<-c(rep("CTC Breast #1 (Aceto N et al.)",CTC_GSE51827_sample),
              rep("CTC Lung #6 (Zheng Y et al.)",CTC_GSE74639_sample),
              rep("CTC Breast #7 (Jordan NV et al.)",CTC_GSE75367_sample),
              rep("CTC Breast #8 (Barbara MS et al.)",CTC_GSE109761_sample),
-             rep("CTC Breast #9 (Sofia G et al.)",CTC_GSE111065_sample),
-             rep("CTC Breast #10 (Aceto N et al)",CTC_GSE86978_sample),
-             rep("CTC Melanoma #11 (Daniel R et al)",CTC_GSE38495_sample))
+             rep("CTC Breast #9 (Aceto N et al)",CTC_GSE86978_sample),
+             rep("CTC Melanoma #10 (Daniel R et al)",CTC_GSE38495_sample))
 
 dim(normalized_matrix_filter)
-row_annotation = c(rep('Epithelial',16),rep('Mesenchymal',43),rep('Cancer Stem Cell',27))
+row_annotation = c(rep('Epithelial',16),rep('Mesenchymal',39),rep('Cancer Stem Cell',26))
 length(row_annotation)
 length(col_label)
 filter_epi_genes <- rownames(normalized_data)[1:16]
 #save(filter_epi_genes,file = "dataset/new_final_filter_epitheilal_genes.Rdata")
 saveRDS(filter_epi_genes,file = "dataset/new_final_filter_epitheilal_genes.rds")
 #write.csv(filter_epi_genes,file="dataset/new_final_filter_epitheilal_genes.csv")
-filter_mesn_genes <- rownames(normalized_data)[17:59]
+filter_mesn_genes <- rownames(normalized_data)[17:55]
 #save(filter_mesn_genes,file = "dataset/new_final_filter_mesenchymal_genes.Rdata")
 saveRDS(filter_mesn_genes,file = "dataset/new_final_filter_mesenchymal_genes.rds")
 #write.csv(filter_mesn_genes,file="dataset/new_final_filter_mesenchymal_genes.csv")
-filter_csc_genes <- rownames(normalized_data)[60:86]
+filter_csc_genes <- rownames(normalized_data)[56:81]
 #save(filter_csc_genes,file = "dataset/new_final_filter_cancer_stem_genes.Rdata")
 saveRDS(filter_csc_genes,file = "dataset/new_final_filter_cancer_stem_genes.rds")
 #write.csv(filter_csc_genes,file="dataset/new_final_filter_cancer_stem_genes.csv")
@@ -131,8 +160,8 @@ annotation_rows <- data.frame(Marker = factor(row_annotation))
 rownames(annotation_rows)<-rownames(normalized_matrix_filter)
 dim(annotation_rows)
 test1<-get_stouffer(z_score[1:16,],2)
-test2<-get_stouffer(z_score[17:59,],2)
-test3<-get_stouffer(z_score[60:86,],2)
+test2<-get_stouffer(z_score[17:55,],2)
+test3<-get_stouffer(z_score[56:81,],2)
 new_data <- data.frame('Cancer'=test3,'Epitheial'=test1,'Mesenchymal'=test2)
 dim(new_data)
 dim(z_score)
@@ -158,10 +187,8 @@ ann_colors = list(Study = c("CTC Breast #1 (Aceto N et al.)"="#332288",
                             "CTC Lung #6 (Zheng Y et al.)"="#999933",
                             "CTC Breast #7 (Jordan NV et al.)"="#DDCC77",
                             "CTC Breast #8 (Barbara MS et al.)"="#661100",
-                            "CTC Breast #9 (Sofia G et al.)"="#CC6677",
-                            "CTC Breast #10 (Aceto N et al)"="#882255",
-                            "CTC Melanoma #11 (Daniel R et al)"="#AA4499"
-))
+                            "CTC Breast #9 (Aceto N et al)"="#882255",
+                            "CTC Melanoma #10 (Daniel R et al)"="#AA4499"))
 matrix_data<-new_data
 dim(matrix_data)
 head(matrix_data)
